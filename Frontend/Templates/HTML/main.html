@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RDC Volume Measurement System</title>
+    <title>RDC Construction Volume Measurement System</title>
+    <!-- Changed from absolute to relative path -->
+     <link rel="stylesheet" href="../CSS/style.css">
     <!-- Bootstrap CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Icons -->
@@ -11,22 +13,25 @@
 </head>
 <body>
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-white mb-4 shadow-sm">
+    <nav class="navbar navbar-expand-lg mb-4">
         <div class="container">
             <a class="navbar-brand" href="#">
-                <i class="bi bi-box-seam me-2"></i>
-                RDC Volume Measurement System
+                <i class="bi bi-building me-2"></i>
+                <span class="brand-highlight">RDC</span> Volume Measurement
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <button class="navbar-toggler bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link active" href="#"><i class="bi bi-house-door"></i> Home</a>
+                        <a class="nav-link active" href="#"><i class="bi bi-house-door"></i> Dashboard</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#"><i class="bi bi-archive"></i> Projects</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="bi bi-bar-chart"></i> Reports</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#"><i class="bi bi-gear"></i> Settings</a>
@@ -39,21 +44,61 @@
         </div>
     </nav>
 
-    <div class="container">
+    <div class="container main-container">
+        <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="#"><i class="bi bi-house-door-fill"></i> Home</a></li>
+                <li class="breadcrumb-item"><a href="#">Projects</a></li>
+                <li class="breadcrumb-item active">Volume Measurement</li>
+            </ol>
+        </nav>
+
+        <!-- Project Info -->
+        <div class="project-info mb-4 fade-in">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5 class="mb-3"><i class="bi bi-info-circle me-2"></i>Project Information</h5>
+                    <div class="project-info-item">
+                        <i class="bi bi-calendar3"></i>
+                        <span>Date: April 20, 2025</span>
+                    </div>
+                    <div class="project-info-item">
+                        <i class="bi bi-geo-alt"></i>
+                        <span>Location: RDC Site 023-B</span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="project-info-item">
+                        <i class="bi bi-person"></i>
+                        <span>Operator: John Smith</span>
+                    </div>
+                    <div class="project-info-item">
+                        <i class="bi bi-tag"></i>
+                        <span>Project ID: RDC-2025-042</span>
+                    </div>
+                    <div class="project-info-item">
+                        <i class="bi bi-check-circle"></i>
+                        <span>Status: Active</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Main content -->
         <div class="row g-4">
             <!-- Left column: Image upload and settings -->
             <div class="col-lg-4">
                 <div class="card mb-4">
                     <div class="card-header d-flex align-items-center">
-                        <i class="bi bi-cloud-upload me-2"></i> Image Upload
+                        <i class="bi bi-cloud-upload me-2 text-primary"></i> Image Upload
                     </div>
                     <div class="card-body">
-                        <div class="upload-area mb-3">
+                        <div class="upload-area mb-4">
                             <input type="file" id="topViewInput" accept="image/*">
                             <div class="py-3">
-                                <i class="bi bi-camera text-primary" style="font-size: 2rem;"></i>
-                                <h5 class="mt-3 mb-1">Top View Image</h5>
+                                <i class="bi bi-camera upload-icon"></i>
+                                <h5 class="mt-2 mb-1">Top View Image</h5>
                                 <p class="text-muted small mb-0">Drop your image here or click to browse</p>
                                 <small class="text-muted">Supported formats: JPG, PNG, BMP</small>
                             </div>
@@ -62,8 +107,8 @@
                         <div class="upload-area">
                             <input type="file" id="frontViewInput" accept="image/*">
                             <div class="py-3">
-                                <i class="bi bi-camera-video text-primary" style="font-size: 2rem;"></i>
-                                <h5 class="mt-3 mb-1">Front View Image</h5>
+                                <i class="bi bi-camera-video upload-icon"></i>
+                                <h5 class="mt-2 mb-1">Front View Image</h5>
                                 <p class="text-muted small mb-0">Drop your image here or click to browse</p>
                                 <small class="text-muted">Supported formats: JPG, PNG, BMP</small>
                             </div>
@@ -74,7 +119,7 @@
                 <!-- Pipeline Settings Card -->
                 <div class="card mb-4">
                     <div class="card-header d-flex align-items-center">
-                        <i class="bi bi-sliders me-2"></i> Pipeline Settings
+                        <i class="bi bi-sliders me-2 text-primary"></i> Measurement Settings
                     </div>
                     <div class="card-body">
                         <ul class="nav nav-pills nav-fill mb-3 nav-pipeline" id="pipelineTab" role="tablist">
@@ -88,17 +133,36 @@
 
                         <div class="tab-content" id="pipelineTabContent">
                             <div class="tab-pane fade show active" id="standard" role="tabpanel">
-                                <div class="alert alert-info" role="alert">
-                                    <i class="bi bi-info-circle me-2"></i>
-                                    Standard processing uses basic image analysis techniques.
+                                <div class="alert alert-info rounded-lg" role="alert">
+                                    <i class="bi bi-info-circle-fill me-2"></i>
+                                    Standard processing uses basic image analysis for most construction materials.
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="materialType" class="form-label">Material Type:</label>
+                                    <select class="form-select" id="materialType">
+                                        <option selected>Concrete</option>
+                                        <option>Aggregate</option>
+                                        <option>Soil</option>
+                                        <option>Mixed</option>
+                                    </select>
+                                </div>
+
+                                <div class="mb-0">
+                                    <label for="measurementUnit" class="form-label">Measurement Unit:</label>
+                                    <select class="form-select" id="measurementUnit">
+                                        <option selected>Cubic Meters (m³)</option>
+                                        <option>Cubic Feet (ft³)</option>
+                                        <option>Cubic Yards (yd³)</option>
+                                    </select>
                                 </div>
                             </div>
                             <div class="tab-pane fade" id="enhanced" role="tabpanel">
                                 <div class="accordion" id="enhancedOptions">
-                                    <div class="accordion-item border-0 bg-light mb-2">
+                                    <div class="accordion-item border-0 bg-light-subtle mb-2">
                                         <h2 class="accordion-header" id="headingVision">
-                                            <button class="accordion-button collapsed bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#collapseVision">
-                                                Vision Settings
+                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseVision">
+                                                <i class="bi bi-eye me-2"></i> Vision Settings
                                             </button>
                                         </h2>
                                         <div id="collapseVision" class="accordion-collapse collapse" data-bs-parent="#enhancedOptions">
@@ -115,34 +179,44 @@
                                                         Use Depth-Aware Segmentation
                                                     </label>
                                                 </div>
+                                                <div class="form-check mb-2">
+                                                    <input class="form-check-input" type="checkbox" id="useEdgeDetection">
+                                                    <label class="form-check-label" for="useEdgeDetection">
+                                                        Use Enhanced Edge Detection
+                                                    </label>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
 
-                                    <div class="accordion-item border-0 bg-light mb-2">
+                                    <div class="accordion-item border-0 bg-light-subtle mb-2">
                                         <h2 class="accordion-header" id="headingCalibration">
-                                            <button class="accordion-button collapsed bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#collapseCalibration">
-                                                Calibration
+                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseCalibration">
+                                                <i class="bi bi-tools me-2"></i> Calibration
                                             </button>
                                         </h2>
                                         <div id="collapseCalibration" class="accordion-collapse collapse" data-bs-parent="#enhancedOptions">
                                             <div class="accordion-body">
                                                 <div class="mb-3">
                                                     <label for="temperature" class="form-label">Temperature (°C):</label>
-                                                    <input type="number" class="form-control form-control-sm" id="temperature" value="20.0" step="0.1">
+                                                    <input type="number" class="form-control" id="temperature" value="20.0" step="0.1">
                                                 </div>
                                                 <div class="mb-3">
                                                     <label for="calibrationFile" class="form-label">Calibration File:</label>
-                                                    <input type="file" class="form-control form-control-sm" id="calibrationFile" accept=".npz,.json">
+                                                    <input type="file" class="form-control" id="calibrationFile" accept=".npz,.json">
+                                                </div>
+                                                <div class="mb-0">
+                                                    <label for="referenceDimension" class="form-label">Reference Dimension (cm):</label>
+                                                    <input type="number" class="form-control" id="referenceDimension" value="100.0" step="0.1">
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
 
-                                    <div class="accordion-item border-0 bg-light">
+                                    <div class="accordion-item border-0 bg-light-subtle">
                                         <h2 class="accordion-header" id="headingValidation">
-                                            <button class="accordion-button collapsed bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#collapseValidation">
-                                                Validation
+                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseValidation">
+                                                <i class="bi bi-check-square me-2"></i> Validation
                                             </button>
                                         </h2>
                                         <div id="collapseValidation" class="accordion-collapse collapse" data-bs-parent="#enhancedOptions">
@@ -154,8 +228,12 @@
                                                     </label>
                                                 </div>
                                                 <div class="mb-3">
+                                                    <label for="densityValue" class="form-label">Material Density (kg/m³):</label>
+                                                    <input type="number" class="form-control" id="densityValue" value="2400" step="10">
+                                                </div>
+                                                <div class="mb-3">
                                                     <label for="thermalModelFile" class="form-label">Thermal Model:</label>
-                                                    <input type="file" class="form-control form-control-sm" id="thermalModelFile" accept=".json">
+                                                    <input type="file" class="form-control" id="thermalModelFile" accept=".json">
                                                 </div>
                                             </div>
                                         </div>
@@ -169,10 +247,10 @@
                 <!-- Action Buttons -->
                 <div class="d-grid gap-2">
                     <button class="btn btn-primary btn-process" id="processBtn" disabled>
-                        <i class="bi bi-play-fill"></i> Process Images
+                        <i class="bi bi-play-fill me-2"></i> Process Images
                     </button>
                     <button class="btn btn-outline-secondary" id="clearBtn">
-                        <i class="bi bi-trash"></i> Clear All
+                        <i class="bi bi-trash me-2"></i> Clear All
                     </button>
                 </div>
             </div>
@@ -182,7 +260,7 @@
                 <div class="card mb-4">
                     <div class="card-header d-flex align-items-center justify-content-between">
                         <div>
-                            <i class="bi bi-image me-2"></i> Image Preview
+                            <i class="bi bi-image me-2 text-primary"></i> Image Preview
                         </div>
                         <div class="btn-group btn-group-sm">
                             <button type="button" class="btn btn-outline-secondary" id="prevBtn" disabled>
@@ -195,329 +273,14 @@
                     </div>
                     <div class="card-body">
                         <!-- Top View -->
-                        <h6 class="mb-2 text-muted">Top View</h6>
-                        <div class="image-preview-container mb-4">
-                            <div class="placeholder-image" id="topViewPlaceholder">
-                                <i class="bi bi-image"></i>
-                                <p class="text-muted small">No image uploaded</p>
-                            </div>
-                            <img id="topImage" src="" alt="Top View" style="display: none;">
-                        </div>
-
-                        <!-- Front View -->
-                        <h6 class="mb-2 text-muted">Front View</h6>
-                        <div class="image-preview-container">
-                            <div class="placeholder-image" id="frontViewPlaceholder">
-                                <i class="bi bi-image"></i>
-                                <p class="text-muted small">No image uploaded</p>
-                            </div>
-                            <img id="frontImage" src="" alt="Front View" style="display: none;">
-                        </div>
-                    </div>
-                    <div class="card-footer text-center text-muted" id="pairInfo">
-                        No images loaded
-                    </div>
-                </div>
-
-                <!-- Console Card -->
-                <div class="card">
-                    <div class="card-header d-flex align-items-center justify-content-between">
-                        <div>
-                            <i class="bi bi-terminal me-2"></i> Console Output
-                        </div>
-                        <button class="btn btn-sm btn-outline-secondary" id="clearConsoleBtn">
-                            <i class="bi bi-trash"></i> Clear
-                        </button>
-                    </div>
-                    <div class="card-body p-0">
-                        <div class="console-output" id="console">
-                            <div class="console-entry console-info">[INFO] System initialized and ready.</div>
-                            <div class="console-entry">Ready for image upload.</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Right column: Results -->
-            <div class="col-lg-4">
-                <div class="card mb-4">
-                    <div class="card-header d-flex align-items-center">
-                        <i class="bi bi-graph-up me-2"></i> Results & Visualization
-                    </div>
-                    <div class="card-body">
-                        <div id="visualization" class="mb-4">
-                            <div class="text-center">
-                                <i class="bi bi-box3d text-muted" style="font-size: 3rem;"></i>
-                                <p class="mt-3 text-muted">3D visualization will appear here after processing</p>
-                            </div>
-                        </div>
-
-                        <h6 class="mb-3 border-bottom pb-2">Volume Measurements</h6>
-                        <div class="table-responsive">
-                            <table class="table table-sm table-hover table-results">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">#</th>
-                                        <th scope="col">Volume (m³)</th>
-                                        <th scope="col">Date/Time</th>
-                                        <th scope="col">Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="results-body">
-                                    <!-- Results will be populated here -->
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    <div class="card-footer">
-                        <div class="d-flex justify-content-between">
-                            <button class="btn btn-sm btn-outline-primary" id="saveResultsBtn" disabled>
-                                <i class="bi bi-file-earmark-arrow-down"></i> Export CSV
-                            </button>
-                            <button class="btn btn-sm btn-outline-secondary" id="synthDataBtn">
-                                <i class="bi bi-database"></i> Generate Synthetic Data
-                            </button>
-                        </div>
+                        <h6 class="mb-2 text-secondary fw-bold"><i class="bi bi-arrow-down-square me-1"></i> Top View</h6>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Status Bar -->
-    <div class="status-bar py-2">
-        <div class="container">
-            <div class="d-flex justify-content-between align-items-center">
-                <div class="status-indicator">
-                    <span class="status-dot active"></span>
-                    <span class="status-text">System ready</span>
-                </div>
-                <div>
-                    <span class="badge bg-primary-subtle">v1.2.0</span>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Bootstrap JS and Popper.js -->
+    <!-- Include Bootstrap JS bundle at the end of the document -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-
-    <script>
-        // File upload handling
-        function handleFileUpload(fileInput, imageElement, placeholderElement) {
-            fileInput.addEventListener('change', function(e) {
-                if (e.target.files && e.target.files[0]) {
-                    const file = e.target.files[0];
-                    const reader = new FileReader();
-
-                    reader.onload = function(event) {
-                        imageElement.src = event.target.result;
-                        imageElement.style.display = 'block';
-                        imageElement.classList.add('fade-in');
-                        placeholderElement.style.display = 'none';
-
-                        // Log to console
-                        logToConsole(`Uploaded: ${file.name} (${Math.round(file.size/1024)} KB)`, 'info');
-
-                        // Enable processing button if both images are uploaded
-                        checkProcessingAvailability();
-                    };
-
-                    reader.readAsDataURL(file);
-                }
-            });
-        }
-
-        // Initialize file uploads
-        document.addEventListener('DOMContentLoaded', function() {
-            // Initialize tooltips
-            const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
-            const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
-
-            const topViewInput = document.getElementById('topViewInput');
-            const frontViewInput = document.getElementById('frontViewInput');
-            const topImage = document.getElementById('topImage');
-            const frontImage = document.getElementById('frontImage');
-            const topViewPlaceholder = document.getElementById('topViewPlaceholder');
-            const frontViewPlaceholder = document.getElementById('frontViewPlaceholder');
-
-            handleFileUpload(topViewInput, topImage, topViewPlaceholder);
-            handleFileUpload(frontViewInput, frontImage, frontViewPlaceholder);
-
-            // Clear button
-            document.getElementById('clearBtn').addEventListener('click', function() {
-                topImage.src = '';
-                frontImage.src = '';
-                topImage.style.display = 'none';
-                frontImage.style.display = 'none';
-                topViewPlaceholder.style.display = 'flex';
-                frontViewPlaceholder.style.display = 'flex';
-                document.getElementById('processBtn').disabled = true;
-                logToConsole('Cleared all images', 'info');
-            });
-
-            // Clear console button
-            document.getElementById('clearConsoleBtn').addEventListener('click', function() {
-                const console = document.getElementById('console');
-                console.innerHTML = '<div class="console-entry console-info">[INFO] Console cleared.</div>';
-            });
-
-            // Process button
-            document.getElementById('processBtn').addEventListener('click', function() {
-                // Simulate processing
-                this.disabled = true;
-                this.innerHTML = '<i class="bi bi-hourglass-split me-2"></i> Processing...';
-
-                // Update status bar
-                document.querySelector('.status-dot').classList.remove('active');
-                document.querySelector('.status-dot').classList.add('processing');
-                document.querySelector('.status-text').textContent = 'Processing...';
-
-                logToConsole('Starting volume calculation...', 'info');
-
-                // Simulate processing steps
-                setTimeout(() => {
-                    logToConsole('Preprocessing images...', 'info');
-                }, 500);
-
-                setTimeout(() => {
-                    logToConsole('Detecting object boundaries...', 'info');
-                }, 1000);
-
-                setTimeout(() => {
-                    logToConsole('Calculating dimensions...', 'info');
-                }, 1500);
-
-                // Simulate processing delay
-                setTimeout(() => {
-                    const volume = (Math.random() * 10 + 1).toFixed(3);
-                    addResultRow(volume);
-
-                    this.disabled = false;
-                    this.innerHTML = '<i class="bi bi-play-fill me-1"></i> Process Images';
-
-                    // Reset status bar
-                    document.querySelector('.status-dot').classList.remove('processing');
-                    document.querySelector('.status-dot').classList.add('active');
-                    document.querySelector('.status-text').textContent = 'Processing complete';
-
-                    logToConsole(`Volume calculation complete: ${volume} m³`, 'success');
-
-                    // Enable save results button
-                    document.getElementById('saveResultsBtn').disabled = false;
-
-                    // Update visualization (placeholder)
-                    updateVisualization();
-                }, 2500);
-            });
-
-            // Synthetic data button
-            document.getElementById('synthDataBtn').addEventListener('click', function() {
-                logToConsole('Generating synthetic data...', 'info');
-
-                // Simulate processing delay
-                setTimeout(() => {
-                    for (let i = 0; i < 3; i++) {
-                        const volume = (Math.random() * 10 + 1).toFixed(3);
-                        addResultRow(volume, 'Synthetic');
-                    }
-                    logToConsole('Generated 3 synthetic data points', 'success');
-                    document.getElementById('saveResultsBtn').disabled = false;
-                    updateVisualization();
-                }, 1500);
-            });
-
-            // Save results button
-            document.getElementById('saveResultsBtn').addEventListener('click', function() {
-                logToConsole('Exporting results to CSV...', 'info');
-                setTimeout(() => {
-                    logToConsole('Results saved as "volume_measurements.csv"', 'success');
-
-                    // Show success message with toast (could be implemented with Bootstrap toast)
-                    alert('Results successfully exported to CSV file.');
-                }, 1000);
-            });
-        });
-
-        // Utility functions
-        function checkProcessingAvailability() {
-            const topImage = document.getElementById('topImage');
-            const frontImage = document.getElementById('frontImage');
-            const processBtn = document.getElementById('processBtn');
-
-            if (topImage.src && frontImage.src &&
-                topImage.src !== window.location.href &&
-                frontImage.src !== window.location.href) {
-                processBtn.disabled = false;
-                document.getElementById('pairInfo').textContent = 'Images ready for processing';
-            } else {
-                processBtn.disabled = true;
-            }
-        }
-
-        function addResultRow(volume, type = 'Upload') {
-            const resultsBody = document.getElementById('results-body');
-            const rowCount = resultsBody.rows.length;
-            const now = new Date();
-            const timestamp = now.toLocaleString();
-
-            const row = document.createElement('tr');
-            row.classList.add('fade-in');
-
-            row.innerHTML = `
-                <td>${rowCount + 1}</td>
-                <td><strong>${volume}</strong> m³</td>
-                <td>${timestamp}</td>
-                <td><span class="badge bg-success-subtle">Valid</span></td>
-            `;
-
-            resultsBody.appendChild(row);
-        }
-
-        function logToConsole(message, type = '') {
-            const console = document.getElementById('console');
-            const entry = document.createElement('div');
-            entry.className = 'console-entry';
-
-            const timestamp = new Date().toLocaleTimeString();
-
-            if (type === 'info') {
-                entry.classList.add('console-info');
-                entry.textContent = `[${timestamp}] [INFO] ${message}`;
-            } else if (type === 'success') {
-                entry.classList.add('console-success');
-                entry.textContent = `[${timestamp}] [SUCCESS] ${message}`;
-            } else if (type === 'error') {
-                entry.classList.add('console-error');
-                entry.textContent = `[${timestamp}] [ERROR] ${message}`;
-            } else if (type === 'warning') {
-                entry.classList.add('console-warning');
-                entry.textContent = `[${timestamp}] [WARNING] ${message}`;
-            } else {
-                entry.textContent = `[${timestamp}] ${message}`;
-            }
-
-            console.appendChild(entry);
-            console.scrollTop = console.scrollHeight;
-        }
-
-        function updateVisualization() {
-            const visualization = document.getElementById('visualization');
-
-            // This is a placeholder for actual 3D visualization
-            // In a real implementation, you would use a library like Three.js or Plotly
-            visualization.innerHTML = `
-                <div class="text-center fade-in">
-                    <svg width="300" height="200" viewBox="0 0 300 200">
-                        <rect x="100" y="50" width="100" height="100" fill="#0d6efd" stroke="#0a58ca" stroke-width="2" />
-                        <polygon points="100,50 75,25 175,25 200,50" fill="#20c997" stroke="#198754" stroke-width="2" />
-                        <polygon points="200,50 200,150 175,175 175,25" fill="#fd7e14" stroke="#dc3545" stroke-width="2" opacity="0.8" />
-                        <text x="150" y="110" text-anchor="middle" fill="white" font-weight="bold">Volume</text>
-                    </svg>
-                    <p class="mt-3">3D Volume Visualization</p>
-                </div>
-            `;
-        }
-    </script>
 </body>
 </html>
