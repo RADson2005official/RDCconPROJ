@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - Concrete Damage Detection</title>
+    <!-- Link to your CSS file -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header>
+        <h1>About Concrete Damage Detection</h1>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('index') }}">Home</a></li>
+                <li><a href="{{ url_for('about') }}">About</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <h2>About the Project</h2>
+        <p>
+            This application uses computer vision techniques to analyze images of concrete
+            structures and identify potential damage such as cracks.
+        </p>
+        <p>
+            Upload an image on the main page to get started.
+        </p>
+        <!-- Add more information about your project here -->
+    </main>
+
+    <footer>
+        <p>&copy; 2025 RDC Concrete Project</p>
+    </footer>
+
+    <!-- Optional: Link to your JavaScript file if needed for this page -->
+    <!-- <script src="{{ url_for('static', filename='js/script.js') }}"></script> -->
+</body>
+</html>

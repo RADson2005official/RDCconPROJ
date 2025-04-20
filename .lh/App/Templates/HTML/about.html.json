@@ -1,0 +1,18 @@
+{
+    "sourceFile": "App/Templates/HTML/about.html",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1745145400074,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1745145400074,
+            "name": "Commit-0",
+            "content": "<!DOCTYPE html>\r\n<html lang=\"en\">\r\n<head>\r\n    <meta charset=\"UTF-8\">\r\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\r\n    <title>About - Concrete Damage Detection</title>\r\n    <!-- Link to your CSS file -->\r\n    <link rel=\"stylesheet\" href=\"{{ url_for('static', filename='css/style.css') }}\">\r\n</head>\r\n<body>\r\n    <header>\r\n        <h1>About Concrete Damage Detection</h1>\r\n        <nav>\r\n            <ul>\r\n                <li><a href=\"{{ url_for('index') }}\">Home</a></li>\r\n                <li><a href=\"{{ url_for('about') }}\">About</a></li>\r\n            </ul>\r\n        </nav>\r\n    </header>\r\n\r\n    <main>\r\n        <h2>About the Project</h2>\r\n        <p>\r\n            This application uses computer vision techniques to analyze images of concrete\r\n            structures and identify potential damage such as cracks.\r\n        </p>\r\n        <p>\r\n            Upload an image on the main page to get started.\r\n        </p>\r\n        <!-- Add more information about your project here -->\r\n    </main>\r\n\r\n    <footer>\r\n        <p>&copy; 2025 RDC Concrete Project</p>\r\n    </footer>\r\n\r\n    <!-- Optional: Link to your JavaScript file if needed for this page -->\r\n    <!-- <script src=\"{{ url_for('static', filename='js/script.js') }}\"></script> -->\r\n</body>\r\n</html>"
+        }
+    ]
+}

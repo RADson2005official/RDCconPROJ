@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RDC Construction Volume Measurement System</title>
-    <!-- Changed from absolute to relative path -->
-     <link rel="stylesheet" href="../../static/CSS/style.css">
+    <!-- Use url_for for static files -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='CSS/style.css') }}">
     <!-- Bootstrap CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Icons -->
@@ -15,15 +15,17 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg mb-4">
         <div class="container">
-            <a class="navbar-brand" href="#">
+            <!-- Link brand to home -->
+            <a class="navbar-brand" href="{{ url_for('index') }}">
                 <i class="bi bi-building me-2"></i>
                 <span class="brand-highlight">RDC</span> Volume Measurement
             </a>
-            <button class="navbar-toggler bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <button class="navbar-toggler bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
+            <div class="collapse navbar-collapse" id="navbarNav" >
                 <ul class="navbar-nav ms-auto">
+                    <!-- Keep other nav links as placeholders for now -->
                     <li class="nav-item">
                         <a class="nav-link active" href="#"><i class="bi bi-house-door"></i> Dashboard</a>
                     </li>
@@ -39,6 +41,9 @@
                     <li class="nav-item">
                         <a class="nav-link" href="#"><i class="bi bi-question-circle"></i> Help</a>
                     </li>
+                    <li class="nav-item"> <!-- Added About link -->
+                        <a class="nav-link" href="{{ url_for('about') }}"><i class="bi bi-info-circle"></i> About</a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -48,8 +53,9 @@
         <!-- Breadcrumb -->
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="#"><i class="bi bi-house-door-fill"></i> Home</a></li>
-                <li class="breadcrumb-item"><a href="#">Projects</a></li>
+                <!-- Link Home breadcrumb to index -->
+                <li class="breadcrumb-item"><a href="{{ url_for('index') }}"><i class="bi bi-house-door-fill"></i> Home</a></li>
+                <li class="breadcrumb-item"><a href="#">Projects</a></li> <!-- Placeholder -->
                 <li class="breadcrumb-item active">Volume Measurement</li>
             </ol>
         </nav>
@@ -94,8 +100,10 @@
                         <i class="bi bi-cloud-upload me-2 text-primary"></i> Image Upload
                     </div>
                     <div class="card-body">
+                        <!-- Top View Upload -->
                         <div class="upload-area mb-4">
-                            <input type="file" id="topViewInput" accept="image/*">
+                            <!-- Match ID and add name attribute for JS/Form Data -->
+                            <input type="file" id="topImageFile" name="topImageFile" accept="image/*">
                             <div class="py-3">
                                 <i class="bi bi-camera upload-icon"></i>
                                 <h5 class="mt-2 mb-1">Top View Image</h5>
@@ -103,9 +111,10 @@
                                 <small class="text-muted">Supported formats: JPG, PNG, BMP</small>
                             </div>
                         </div>
-
+                        <!-- Front View Upload -->
                         <div class="upload-area">
-                            <input type="file" id="frontViewInput" accept="image/*">
+                            <!-- Match ID and add name attribute for JS/Form Data -->
+                            <input type="file" id="frontImageFile" name="frontImageFile" accept="image/*">
                             <div class="py-3">
                                 <i class="bi bi-camera-video upload-icon"></i>
                                 <h5 class="mt-2 mb-1">Front View Image</h5>
@@ -113,6 +122,8 @@
                                 <small class="text-muted">Supported formats: JPG, PNG, BMP</small>
                             </div>
                         </div>
+                        <!-- Added Load Status Display Area -->
+                        <div id="loadStatus" class="mt-3 text-center text-muted small">Select top and front view images.</div>
                     </div>
                 </div>
 
@@ -137,7 +148,6 @@
                                     <i class="bi bi-info-circle-fill me-2"></i>
                                     Standard processing uses basic image analysis for most construction materials.
                                 </div>
-
                                 <div class="mb-3">
                                     <label for="materialType" class="form-label">Material Type:</label>
                                     <select class="form-select" id="materialType">
@@ -147,7 +157,6 @@
                                         <option>Mixed</option>
                                     </select>
                                 </div>
-
                                 <div class="mb-0">
                                     <label for="measurementUnit" class="form-label">Measurement Unit:</label>
                                     <select class="form-select" id="measurementUnit">
@@ -159,6 +168,7 @@
                             </div>
                             <div class="tab-pane fade" id="enhanced" role="tabpanel">
                                 <div class="accordion" id="enhancedOptions">
+                                    <!-- Vision Settings Accordion -->
                                     <div class="accordion-item border-0 bg-light-subtle mb-2">
                                         <h2 class="accordion-header" id="headingVision">
                                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseVision">
@@ -169,26 +179,20 @@
                                             <div class="accordion-body">
                                                 <div class="form-check mb-2">
                                                     <input class="form-check-input" type="checkbox" id="useStereo">
-                                                    <label class="form-check-label" for="useStereo">
-                                                        Use Stereo Vision
-                                                    </label>
+                                                    <label class="form-check-label" for="useStereo">Use Stereo Vision</label>
                                                 </div>
                                                 <div class="form-check mb-2">
                                                     <input class="form-check-input" type="checkbox" id="useDepthAware" checked>
-                                                    <label class="form-check-label" for="useDepthAware">
-                                                        Use Depth-Aware Segmentation
-                                                    </label>
+                                                    <label class="form-check-label" for="useDepthAware">Use Depth-Aware Segmentation</label>
                                                 </div>
                                                 <div class="form-check mb-2">
                                                     <input class="form-check-input" type="checkbox" id="useEdgeDetection">
-                                                    <label class="form-check-label" for="useEdgeDetection">
-                                                        Use Enhanced Edge Detection
-                                                    </label>
+                                                    <label class="form-check-label" for="useEdgeDetection">Use Enhanced Edge Detection</label>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-
+                                    <!-- Calibration Accordion -->
                                     <div class="accordion-item border-0 bg-light-subtle mb-2">
                                         <h2 class="accordion-header" id="headingCalibration">
                                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseCalibration">
@@ -212,7 +216,7 @@
                                             </div>
                                         </div>
                                     </div>
-
+                                    <!-- Validation Accordion -->
                                     <div class="accordion-item border-0 bg-light-subtle">
                                         <h2 class="accordion-header" id="headingValidation">
                                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseValidation">
@@ -223,9 +227,7 @@
                                             <div class="accordion-body">
                                                 <div class="form-check mb-2">
                                                     <input class="form-check-input" type="checkbox" id="enableValidation" checked>
-                                                    <label class="form-check-label" for="enableValidation">
-                                                        Enable Validation Metrics
-                                                    </label>
+                                                    <label class="form-check-label" for="enableValidation">Enable Validation Metrics</label>
                                                 </div>
                                                 <div class="mb-3">
                                                     <label for="densityValue" class="form-label">Material Density (kg/m³):</label>
@@ -246,10 +248,12 @@
 
                 <!-- Action Buttons -->
                 <div class="d-grid gap-2">
-                    <button class="btn btn-primary btn-process" id="processBtn" disabled>
+                    <!-- Match ID from JS and set type="button" -->
+                    <button type="button" class="btn btn-primary btn-process" id="processUploadedBtn" disabled>
                         <i class="bi bi-play-fill me-2"></i> Process Images
                     </button>
-                    <button class="btn btn-outline-secondary" id="clearBtn">
+                    <!-- Match ID from JS -->
+                    <button type="button" class="btn btn-outline-secondary" id="clearBtn">
                         <i class="bi bi-trash me-2"></i> Clear All
                     </button>
                 </div>
@@ -262,6 +266,7 @@
                         <div>
                             <i class="bi bi-image me-2 text-primary"></i> Image Preview
                         </div>
+                        <!-- Preview navigation buttons (keep disabled for now) -->
                         <div class="btn-group btn-group-sm">
                             <button type="button" class="btn btn-outline-secondary" id="prevBtn" disabled>
                                 <i class="bi bi-chevron-left"></i>
@@ -272,15 +277,103 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <!-- Top View -->
+                        <!-- Top View Preview -->
                         <h6 class="mb-2 text-secondary fw-bold"><i class="bi bi-arrow-down-square me-1"></i> Top View</h6>
+                        <div class="image-preview-container mb-3">
+                            <!-- Image initially hidden -->
+                            <img id="topImage" src="" alt="Top View Image Preview" class="img-fluid rounded" style="display: none;">
+                            <!-- Placeholder initially visible -->
+                            <div class="placeholder-image">
+                                <i class="bi bi-image"></i>
+                                <p>Top View Preview</p>
+                            </div>
+                        </div>
+                        <!-- Front View Preview -->
+                        <h6 class="mb-2 text-secondary fw-bold"><i class="bi bi-aspect-ratio me-1"></i> Front View</h6>
+                        <div class="image-preview-container">
+                            <!-- Image initially hidden -->
+                            <img id="frontImage" src="" alt="Front View Image Preview" class="img-fluid rounded" style="display: none;">
+                            <!-- Placeholder initially visible -->
+                            <div class="placeholder-image">
+                                <i class="bi bi-image"></i>
+                                <p>Front View Preview</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
 
-    <!-- Include Bootstrap JS bundle at the end of the document -->
+            <!-- Right column: Results, Console, Visualization -->
+            <div class="col-lg-4">
+                <!-- Results Card -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <i class="bi bi-table me-2 text-primary"></i> Results
+                    </div>
+                    <div class="card-body p-0"> <!-- Remove padding for table -->
+                        <div class="table-responsive">
+                            <!-- Added table-results class -->
+                            <table class="table table-results mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Volume (m³)</th>
+                                        <th>Timestamp</th>
+                                        <!-- Add other headers if needed -->
+                                    </tr>
+                                </thead>
+                                <!-- Added tbody for JS to populate -->
+                                <tbody id="results-body">
+                                    <!-- Results rows will be added here by JS -->
+                                    <tr><td colspan="3" class="text-center text-muted p-3">No results yet.</td></tr> <!-- Initial placeholder row -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Console Output Card -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <i class="bi bi-terminal me-2 text-primary"></i> Console Output
+                    </div>
+                    <!-- Added console-output class -->
+                    <div id="console" class="console-output">
+                        <div class="console-entry console-info">Initializing system...</div> <!-- Initial message -->
+                    </div>
+                </div>
+
+                <!-- Visualization Card -->
+                <div class="card">
+                    <div class="card-header">
+                        <i class="bi bi-bounding-box me-2 text-primary"></i> Visualization
+                    </div>
+                    <div class="card-body">
+                        <!-- Added visualization div for JS -->
+                        <div id="visualization" class="d-flex align-items-center justify-content-center text-muted">
+                            Visualization Area
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> <!-- End main row -->
+
+        <!-- Status Bar (Fixed Bottom) -->
+        <div class="status-bar p-2">
+            <div class="container d-flex justify-content-between align-items-center">
+                <!-- Added status div for JS -->
+                <div id="status" class="status-text">
+                    <span class="status-dot active"></span> Application ready.
+                </div>
+                <span class="status-text small">RDC Volume System v1.0</span>
+            </div>
+        </div>
+
+    </div> <!-- End main container -->
+
+    <!-- Include Bootstrap JS bundle -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <!-- Include your custom JS using url_for -->
+    <script src="{{ url_for('static', filename='JS/main.js') }}"></script>
 </body>
 </html>
