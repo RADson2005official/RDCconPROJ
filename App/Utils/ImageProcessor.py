@@ -484,8 +484,9 @@ class ImageProcessor:
         }
 
     def visualize_detection_results(self, top_image, front_image, top_edges, front_edges,
-                                    top_corners, front_corners, top_contours, front_contours):
-        """Visualize detection results on original images."""
+                                    top_corners, front_corners, top_contours, front_contours,
+                                    output_path=None):  # Add output_path argument
+        """Visualize detection results on original images. Saves if output_path is provided."""
         try:
             # Create copies for visualization
             top_viz = top_image.copy()
@@ -507,7 +508,7 @@ class ImageProcessor:
                 for corner in front_corners:
                     cv2.circle(front_viz, tuple(corner.astype(int)), 5, (0, 0, 255), -1)
 
-            # Display results
+            # Display or Save results
             plt.figure(figsize=(12, 6))
 
             plt.subplot(121)
@@ -521,7 +522,11 @@ class ImageProcessor:
             plt.axis('off')
 
             plt.tight_layout()
-            plt.show()
+
+            if output_path:
+                plt.savefig(output_path)  # Save the figure
+                logging.info(f"Detection visualization saved to {output_path}")
+                plt.close()  # Close the plot to free memory
 
         except Exception as e:
             logging.warning(f"Failed to visualize detection results: {str(e)}")

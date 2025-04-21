@@ -106,7 +106,7 @@ class Visualizer:
             self.logger.error(f"Error processing module data: {str(e)}\n{traceback.format_exc()}")
             return None
 
-    def plot_cube(self, corners_3d=None, volume=None, density=None, mass=None):
+    def plot_cube(self, corners_3d, volume=None, density=None, mass=None):
         """
         Plot a 3D cube or convex hull based on the given corners and display its properties.
 
@@ -215,51 +215,28 @@ class Visualizer:
             # Create a figure with both traces
             self.fig = go.Figure(data=[points_trace, mesh_trace])
 
+            # --- Update Title Generation ---
+            title_parts = ["3D Visualization"]
+            if volume is not None: title_parts.append(f"Volume: {volume:.4f} m³")  # Increased precision
+            if mass is not None: title_parts.append(f"Mass: {mass:.2f} kg")
+            if density is not None: title_parts.append(f"Density: {density:.1f} kg/m³")
+            # --- End Update ---
+
+            self.fig.update_layout(
+                title='<br>'.join(title_parts),  # Join parts with line breaks
+                scene=dict(
+                    xaxis_title='Width (m)',
+                    yaxis_title='Depth (m)',
+                    zaxis_title='Height (m)',
+                    aspectmode='data'
+                ),
+                margin=dict(l=0, r=0, b=0, t=80)  # Increased top margin for multi-line title
+            )
+            self.logger.info("3D plot generated successfully.")
+
         except Exception as e:
-            self.logger.error(f"Failed to create hull mesh: {str(e)}\n{traceback.format_exc()}")
-            # Just plot the points
-            self.fig = go.Figure(data=[
-                go.Scatter3d(
-                    x=unique_corners[:, 0],
-                    y=unique_corners[:, 1],
-                    z=unique_corners[:, 2],
-                    mode='markers',
-                    marker=dict(
-                        size=8,
-                        color='red',
-                        opacity=0.8
-                    ),
-                    name='Vertices'
-                )
-            ])
-
-        # Add measurements annotation
-        info_text = f'Volume: {volume:.3f} m³<br>' if volume is not None else ''
-        if density is not None:
-            info_text += f'Density: {density:.2f} kg/m³<br>'
-        if mass is not None:
-            info_text += f'Mass: {mass:.2f} kg'
-
-        if info_text:
-            self.fig.update_layout(
-                title=f"3D Pile Reconstruction<br><sub>{info_text}</sub>",
-                scene=dict(
-                    xaxis_title="X (meters)",
-                    yaxis_title="Y (meters)",
-                    zaxis_title="Z (meters)",
-                    aspectmode='cube'  # Equal aspect ratio
-                )
-            )
-        else:
-            self.fig.update_layout(
-                title="3D Pile Reconstruction",
-                scene=dict(
-                    xaxis_title="X (meters)",
-                    yaxis_title="Y (meters)",
-                    zaxis_title="Z (meters)",
-                    aspectmode='cube'  # Equal aspect ratio
-                )
-            )
+            self.logger.error(f"Error generating 3D plot: {e}", exc_info=True)
+            self.fig = None
 
     def display_mesh(self, mesh):
         """

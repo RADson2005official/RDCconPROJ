@@ -1,0 +1,18 @@
+{
+    "sourceFile": "run.py",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1745146794811,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1745146794811,
+            "name": "Commit-0",
+            "content": "import os\r\nfrom App import app # Import the app instance created in App/__init__.py\r\n\r\nif __name__ == '__main__':\r\n    # Use environment variables or defaults for host, port, debug\r\n    host = os.environ.get('FLASK_RUN_HOST', '127.0.0.1')\r\n    try:\r\n        port = int(os.environ.get('FLASK_RUN_PORT', '5000'))\r\n    except ValueError:\r\n        port = 5000\r\n\r\n    # Check FLASK_DEBUG env var, default to True if not set or '1'\r\n    # In production, set FLASK_DEBUG=0 or FLASK_CONFIG=production\r\n    is_debug = os.environ.get('FLASK_DEBUG', '1') == '1'\r\n\r\n    print(f\" * Starting Flask server on http://{host}:{port}\")\r\n    print(f\" * Debug mode: {'on' if is_debug else 'off'}\")\r\n    app.run(host=host, port=port, debug=is_debug)"
+        }
+    ]
+}

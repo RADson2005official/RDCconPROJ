@@ -5,150 +5,150 @@ from PIL import Image, ImageTk
 import cv2
 import numpy as np
 from ultralytics import YOLO
+import logging
+import os  # Needed for visualize_segmentation
 
-model = YOLO("yolov8n.pt")  # Replace with custom-trained model if available
+# Configure logging
+logger = logging.getLogger(__name__)
 
-class SandPileApp:
-    def __init__(self, root):
-        self.root = root
-        self.root.title("Sand Pile Volume Estimator")
-        self.material_type = tk.StringVar(value="Sand")
+# --- Load YOLO Model ---
+MODEL_PATH = "yolov8n.pt"  # Or provide an absolute path / path relative to project root
+yolo_model = None
+try:
+    # Consider checking os.path.exists(MODEL_PATH) if path is not guaranteed
+    yolo_model = YOLO(MODEL_PATH)
+    logger.info(f"YOLOv8 model loaded successfully from {MODEL_PATH}.")
+except Exception as e:
+    logger.error(f"Failed to load YOLO model from {MODEL_PATH}: {e}", exc_info=True)
+    yolo_model = None
 
-        self.top_image_path = None
-        self.front_image_path = None
-        self.tk_images = []
 
-        self.create_widgets()
+def perform_segmentation(image: np.ndarray):
+    """
+    Performs segmentation on the input image using thresholding and contour filtering.
+    Optionally enhances with YOLO detection (if model loaded).
 
-    def create_widgets(self):
-        frame = ttk.Frame(self.root)
-        frame.pack(padx=10, pady=10)
+    Args:
+        image: A NumPy array representing the preprocessed image (BGR format).
 
-        ttk.Label(frame, text="Select Material:").grid(row=0, column=0, sticky='w')
-        ttk.Combobox(frame, textvariable=self.material_type, values=["Sand", "10mm Gravel", "20mm Gravel"]).grid(row=0, column=1)
+    Returns:
+        A dictionary containing segmentation results: {'mask': binary_mask, 'contours': list_of_contours}
+        Returns None if processing fails.
+    """
+    if image is None or image.size == 0:
+        logger.error("perform_segmentation received an invalid or empty image.")
+        return None
+    logger.info(f"Starting segmentation for image with shape: {image.shape}, dtype: {image.dtype}")
+    try:
+        # --- Basic Segmentation (Thresholding & Contours) ---
+        if len(image.shape) == 3 and image.shape[2] == 3:
+            gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        elif len(image.shape) == 2:
+            gray = image  # Already grayscale
+        else:
+            logger.error(f"Unsupported image shape for grayscale conversion: {image.shape}")
+            return None
 
-        ttk.Button(frame, text="Upload Top View", command=self.upload_top).grid(row=1, column=0, pady=5)
-        ttk.Button(frame, text="Upload Front View", command=self.upload_front).grid(row=1, column=1, pady=5)
-        ttk.Button(frame, text="Process", command=self.process).grid(row=2, column=0, columnspan=2, pady=10)
-
-        self.result_label = ttk.Label(frame, text="Detection Results Will Appear Below", font=("Arial", 10, "bold"))
-        self.result_label.grid(row=3, column=0, columnspan=2)
-
-        self.canvas = tk.Canvas(self.root, width=1800, height=1100)
-        self.canvas.pack()
-
-    def upload_top(self):
-        self.top_image_path = filedialog.askopenfilename()
-        messagebox.showinfo("Top View", f"Loaded: {self.top_image_path}")
-
-    def upload_front(self):
-        self.front_image_path = filedialog.askopenfilename()
-        messagebox.showinfo("Front View", f"Loaded: {self.front_image_path}")
-
-    def preprocess(self, path):
-        img = cv2.imread(path)
-        return cv2.resize(img, (640, 640))
-
-    def background_subtract(self, img):
-        gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-        blurred = cv2.GaussianBlur(gray, (5, 5), 0)
-        _, thresh = cv2.threshold(blurred, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
-        contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-        mask = np.zeros_like(gray)
-        for cnt in contours:
-            if cv2.contourArea(cnt) > 1000:
-                cv2.drawContours(mask, [cnt], -1, 255, -1)
-        return mask
-
-    def extract_foreground(self, img):
-        mask = self.background_subtract(img)
-        inverted_mask = cv2.bitwise_not(mask)  # 🔄 Invert the mask
-        foreground = np.zeros_like(img)
-        for c in range(3):
-            foreground[:, :, c] = img[:, :, c] * (inverted_mask // 255)
-        return foreground
-
-    def segment(self, img):
-        gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-        clahe = cv2.createCLAHE(clipLimit=2.5, tileGridSize=(8, 8))
+        clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8))
         enhanced = clahe.apply(gray)
+
+        # --- Parameters to Tune ---
+        block_size = 25  # Must be odd, > 1
+        C = 4
         mask = cv2.adaptiveThreshold(enhanced, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
-                                     cv2.THRESH_BINARY_INV, 25, 4)
-        kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (7, 7))
-        mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernel)
-        mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel)
+                                     cv2.THRESH_BINARY_INV, block_size, C)
 
-        contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-        filtered_mask = np.zeros_like(mask)
-        for cnt in contours:
-            if cv2.contourArea(cnt) > 300:
-                cv2.drawContours(filtered_mask, [cnt], -1, 255, -1)
-        return cv2.bitwise_and(img, img, mask=filtered_mask)
+        kernel_size = 5
+        iterations_close = 1
+        iterations_open = 1
+        kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (kernel_size, kernel_size))
+        mask_closed = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernel, iterations=iterations_close)
+        mask_opened = cv2.morphologyEx(mask_closed, cv2.MORPH_OPEN, kernel, iterations=iterations_open)
 
-    def detect_objects(self, img):
-        results = model(img)
-        annotated = results[0].plot()
-        labels = [model.names[int(cls)] for cls in results[0].boxes.cls.cpu().numpy()]
-        return annotated, labels
+        contours, _ = cv2.findContours(mask_opened, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
-    def show_image(self, img, x, y, label):
-        img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-        pil_img = Image.fromarray(img_rgb)
-        pil_img = pil_img.resize((280, 280))
-        tk_img = ImageTk.PhotoImage(pil_img)
+        min_contour_area = 300
+        filtered_contours = [cnt for cnt in contours if cv2.contourArea(cnt) > min_contour_area]
+        logger.info(f"Filtered contours by area (> {min_contour_area}): {len(filtered_contours)} remaining.")
 
-        self.canvas.create_image(x, y, anchor="nw", image=tk_img)
-        self.canvas.create_text(x + 140, y - 10, text=label, font=("Arial", 10, "bold"))
-        self.tk_images.append(tk_img)
+        # Create a final mask from filtered contours
+        filtered_mask = np.zeros_like(mask_opened)
+        cv2.drawContours(filtered_mask, filtered_contours, -1, 255, -1)  # Draw filled contours
 
-    def show_raw_input(self, path, x, y, label):
-        img = Image.open(path).resize((280, 280))
-        tk_img = ImageTk.PhotoImage(img)
-        self.canvas.create_image(x, y, anchor="nw", image=tk_img)
-        self.canvas.create_text(x + 140, y - 10, text=label, font=("Arial", 10, "bold"))
-        self.tk_images.append(tk_img)
+        segmentation_output = {
+            'mask': filtered_mask,
+            'contours': filtered_contours,
+        }
+        logger.info("Segmentation completed successfully.")
+        return segmentation_output
 
-    def process(self):
-        if not self.top_image_path or not self.front_image_path:
-            messagebox.showerror("Error", "Please upload both views.")
-            return
-
-        self.canvas.delete("all")
-        self.tk_images.clear()
-
-        self.show_raw_input(self.top_image_path, 50, 50, "Input - Top View")
-        self.show_raw_input(self.front_image_path, 50, 400, "Input - Front View")
-
-        # Top View Processing
-        top_img = self.preprocess(self.top_image_path)
-        top_fg = self.extract_foreground(top_img)
-        top_seg = self.segment(top_fg)
-        top_detected, top_labels = self.detect_objects(top_seg)
-
-        # Front View Processing
-        front_img = self.preprocess(self.front_image_path)
-        front_fg = self.extract_foreground(front_img)
-        front_seg = self.segment(front_fg)
-        front_detected, front_labels = self.detect_objects(front_seg)
-
-        # Display Results
-        self.show_image(top_fg, 350, 50, "Top - Foreground")
-        self.show_image(top_seg, 650, 50, "Top - Segmented")
-        self.show_image(top_detected, 950, 50, "Top - Detection")
-
-        self.show_image(front_fg, 350, 400, "Front - Foreground")
-        self.show_image(front_seg, 650, 400, "Front - Segmented")
-        self.show_image(front_detected, 950, 400, "Front - Detection")
-
-        result_text = (
-            f"Material: {self.material_type.get()}\n\n"
-            f"Top View Detected: {top_labels}\n"
-            f"Front View Detected: {front_labels}"
-        )
-        self.result_label.config(text=result_text)
+    except cv2.error as cv_err:
+        logger.error(f"OpenCV error during segmentation: {cv_err}", exc_info=True)
+        return None
+    except Exception as e:
+        logger.error(f"Unexpected error during segmentation: {e}", exc_info=True)
+        return None
 
 
-if __name__ == "__main__":
-    root = tk.Tk()
-    app = SandPileApp(root)
-    root.mainloop()
+def visualize_segmentation(original_image: np.ndarray, segmentation_data: dict, output_path: str):
+    """
+    Draws the segmentation mask overlay onto the original image and saves it.
+
+    Args:
+        original_image: The original BGR image (NumPy array).
+        segmentation_data: The dictionary returned by perform_segmentation (must contain 'mask').
+        output_path: The full path where the visualization image will be saved.
+
+    Returns:
+        bool: True if visualization was saved successfully, False otherwise.
+    """
+    if original_image is None or segmentation_data is None or 'mask' not in segmentation_data:
+        logger.error("visualize_segmentation: Invalid input image or segmentation data.")
+        return False
+    if not output_path:
+        logger.error("visualize_segmentation: Output path not provided.")
+        return False
+
+    mask = segmentation_data['mask']
+    if mask is None or mask.shape[:2] != original_image.shape[:2]:
+        logger.error("visualize_segmentation: Mask is invalid or dimensions mismatch.")
+        return False
+
+    try:
+        # Create a color overlay for the mask (e.g., semi-transparent blue)
+        color_mask = np.zeros_like(original_image)
+        color_mask[mask == 255] = [255, 0, 0]  # Blue color for mask area
+
+        # Blend the original image and the color mask
+        alpha = 0.4  # Transparency factor
+        overlay_image = cv2.addWeighted(original_image, 1, color_mask, alpha, 0)
+
+        # Optionally draw contours
+        contours = segmentation_data.get('contours')
+        if contours:
+            cv2.drawContours(overlay_image, contours, -1, (0, 255, 0), 1)  # Green contours
+
+        # Save the result
+        # Ensure directory exists
+        output_dir = os.path.dirname(output_path)
+        if not os.path.exists(output_dir):
+            try:
+                os.makedirs(output_dir)
+            except OSError as e:
+                logger.error(f"Could not create directory {output_dir}: {e}")
+                return False
+
+        success = cv2.imwrite(output_path, overlay_image)
+        if success:
+            logger.info(f"Segmentation visualization saved to: {output_path}")
+            return True
+        else:
+            logger.error(f"Failed to save segmentation visualization to: {output_path}")
+            return False
+
+    except cv2.error as cv_err:
+        logger.error(f"OpenCV error during segmentation visualization: {cv_err}", exc_info=True)
+        return False
+    except Exception as e:
+        logger.error(f"Unexpected error during segmentation visualization: {e}", exc_info=True)
+        return False

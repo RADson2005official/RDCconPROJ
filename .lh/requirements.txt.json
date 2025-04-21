@@ -1,0 +1,22 @@
+{
+    "sourceFile": "requirements.txt",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 1,
+            "patches": [
+                {
+                    "date": 1745146980458,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1745147688128,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,41 +1,16 @@\n # filepath: e:\\RDC CONCRETE PROJECT\\requirements.txt\r\n flask==3.0.2\r\n-flask-wtf==1.2.1\r\n+flask-wtf==1.2.1 # If using Flask-WTF forms elsewhere\r\n werkzeug==3.0.1\r\n-contourpy==1.3.1\r\n-cycler==0.12.1\r\n-filelock==3.17.0\r\n-fonttools==4.56.0\r\n-fsspec==2025.3.0\r\n Jinja2==3.1.6\r\n-kiwisolver==1.4.8\r\n MarkupSafe==3.0.2\r\n-matplotlib==3.10.1\r\n-mpmath==1.3.0\r\n-networkx==3.4.2\r\n-numpy==2.2.3\r\n-opencv-python==4.11.0.86\r\n-# open3d==0.17.0 # Temporarily commented out due to installation issues\r\n+itsdangerous==2.2.0\r\n+numpy~=1.26 # Or 2.x if compatible with other libs\r\n+opencv-python~=4.9 # Or latest 4.x\r\n+Pillow~=10.2 # Or latest 10.x\r\n+ultralytics~=8.1 # Or latest 8.x (includes PyTorch)\r\n pandas==2.2.4\r\n-Pillow==10.5.0\r\n-pyparsing==3.1.2\r\n-python-dateutil==2.9.0.post0\r\n-pytz==2024.1\r\n-PyWavelets==1.7.0\r\n scikit-image==0.25.0\r\n scikit-learn==1.5.1\r\n scipy==1.15.0\r\n-seaborn==0.13.2\r\n-six==1.16.0\r\n-sympy==1.13.1\r\n-tf-keras==2.17.0rc0\r\n-tifffile==2024.7.2\r\n-tzdata==2024.1\r\n-WTForms==3.1.2\r\n-itsdangerous==2.2.0\r\n\\ No newline at end of file\n-packaging==24.1\r\n-joblib==1.4.2\r\n-threadpoolctl==3.5.0\r\n-imageio==2.34.2\r\n-lazy_loader==0.4\r\n-pooch==1.8.2\n+seaborn==0.13.2\n\\ No newline at end of file\n"
+                }
+            ],
+            "date": 1745146980458,
+            "name": "Commit-0",
+            "content": "# filepath: e:\\RDC CONCRETE PROJECT\\requirements.txt\r\nflask==3.0.2\r\nflask-wtf==1.2.1\r\nwerkzeug==3.0.1\r\ncontourpy==1.3.1\r\ncycler==0.12.1\r\nfilelock==3.17.0\r\nfonttools==4.56.0\r\nfsspec==2025.3.0\r\nJinja2==3.1.6\r\nkiwisolver==1.4.8\r\nMarkupSafe==3.0.2\r\nmatplotlib==3.10.1\r\nmpmath==1.3.0\r\nnetworkx==3.4.2\r\nnumpy==2.2.3\r\nopencv-python==4.11.0.86\r\n# open3d==0.17.0 # Temporarily commented out due to installation issues\r\npandas==2.2.4\r\nPillow==10.5.0\r\npyparsing==3.1.2\r\npython-dateutil==2.9.0.post0\r\npytz==2024.1\r\nPyWavelets==1.7.0\r\nscikit-image==0.25.0\r\nscikit-learn==1.5.1\r\nscipy==1.15.0\r\nseaborn==0.13.2\r\nsix==1.16.0\r\nsympy==1.13.1\r\ntf-keras==2.17.0rc0\r\ntifffile==2024.7.2\r\ntzdata==2024.1\r\nWTForms==3.1.2\r\nitsdangerous==2.2.0\r\npackaging==24.1\r\njoblib==1.4.2\r\nthreadpoolctl==3.5.0\r\nimageio==2.34.2\r\nlazy_loader==0.4\r\npooch==1.8.2"
+        }
+    ]
+}
