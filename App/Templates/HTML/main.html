@@ -301,6 +301,44 @@
                 </div>
             </div>
 
+            <!-- Add this after the Image Preview card in the middle column -->
+            <div class="card">
+                <div class="card-header d-flex align-items-center justify-content-between">
+                    <div>
+                        <i class="bi bi-vector-pen me-2 text-primary"></i> Edge Detection
+                    </div>
+                    <div class="btn-group btn-group-sm">
+                        <button type="button" class="btn btn-outline-secondary" id="edgeViewToggleBtn">
+                            <i class="bi bi-arrows-angle-expand"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <!-- Top View Edge Detection Preview -->
+                    <h6 class="mb-2 text-secondary fw-bold"><i class="bi bi-arrow-down-square me-1"></i> Top View Edges</h6>
+                    <div class="image-preview-container mb-3">
+                        <!-- Image initially hidden -->
+                        <img id="topEdgeImage" src="" alt="Top View Edge Detection" class="img-fluid rounded" style="display: none;">
+                        <!-- Placeholder initially visible -->
+                        <div class="placeholder-image" id="topEdgePlaceholder">
+                            <i class="bi bi-braces-asterisk"></i>
+                            <p>Edge Detection Preview</p>
+                        </div>
+                    </div>
+                    <!-- Front View Edge Detection Preview -->
+                    <h6 class="mb-2 text-secondary fw-bold"><i class="bi bi-aspect-ratio me-1"></i> Front View Edges</h6>
+                    <div class="image-preview-container">
+                        <!-- Image initially hidden -->
+                        <img id="frontEdgeImage" src="" alt="Front View Edge Detection" class="img-fluid rounded" style="display: none;">
+                        <!-- Placeholder initially visible -->
+                        <div class="placeholder-image" id="frontEdgePlaceholder">
+                            <i class="bi bi-braces-asterisk"></i>
+                            <p>Edge Detection Preview</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Right column: Results, Console, Visualization -->
             <div class="col-lg-4">
                 <!-- Results Card -->

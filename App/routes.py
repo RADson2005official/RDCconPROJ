@@ -2,6 +2,7 @@ from flask import render_template, request, jsonify, redirect, url_for, flash, c
 import os
 import time
 import numpy as np
+import cv2
 from werkzeug.utils import secure_filename
 from App import app  # Import the app instance
 import logging  # Import logging
@@ -12,22 +13,29 @@ from .Utils.ImageProcessor import ImageProcessor
 from .Utils.segmentation import perform_segmentation, visualize_segmentation
 from .Utils.Calculation import Calculation
 from .Utils.Visualizer import Visualizer
+# Import the edge detection module
+from .Utils.EdgeDetection import process_with_canny, save_edge_detection_result
 
 # Allowed extensions
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'bmp'}
+
+
 def allowed_file(filename):
     return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+        filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 
 @app.route('/')
 def index():
     """Render the main page."""
     return render_template('main.html')
 
+
 @app.route('/about')
 def about():
     """Render the about page."""
     return render_template('about.html')
+
 
 @app.route('/process_uploaded_images', methods=['POST'])
 def process_uploaded_images_route():
@@ -84,13 +92,50 @@ def process_uploaded_images_route():
             if processed_top is None or processed_front is None:
                 raise ValueError("Failed to preprocess one or both images")
 
-            # 3. Segment
+            # 3. Perform Edge Detection (NEW)
+            top_edge_image, top_edge_time, top_aperture = process_with_canny(
+                processed_top,
+                low_threshold=150,
+                high_threshold=120,
+                aperture_size=3
+            )
+
+            front_edge_image, front_edge_time, front_aperture = process_with_canny(
+                processed_front,
+                low_threshold=150,
+                high_threshold=120,
+                aperture_size=3
+            )
+
+            # Save edge detection images
+            top_edge_filename = f"top_{ts}_edge.png"
+            front_edge_filename = f"front_{ts}_edge.png"
+            top_edge_path = os.path.join(results_folder, top_edge_filename)
+            front_edge_path = os.path.join(results_folder, front_edge_filename)
+            cv2.imwrite(top_edge_path, top_edge_image)
+            cv2.imwrite(front_edge_path, front_edge_image)
+
+            # Save edge detection comparisons
+            top_edge_comp_filename = f"top_{ts}_edge_comp.png"
+            front_edge_comp_filename = f"front_{ts}_edge_comp.png"
+            top_edge_comp_path = os.path.join(results_folder, top_edge_comp_filename)
+            front_edge_comp_path = os.path.join(results_folder, front_edge_comp_filename)
+            save_edge_detection_result(processed_top, top_edge_image, top_edge_comp_path)
+            save_edge_detection_result(processed_front, front_edge_image, front_edge_comp_path)
+
+            # Get URLs for edge detection images
+            top_edge_url = url_for('static', filename=f'results/{top_edge_filename}')
+            front_edge_url = url_for('static', filename=f'results/{front_edge_filename}')
+            top_edge_comp_url = url_for('static', filename=f'results/{top_edge_comp_filename}')
+            front_edge_comp_url = url_for('static', filename=f'results/{front_edge_comp_filename}')
+
+            # 4. Segment
             top_seg_data = perform_segmentation(processed_top)
             front_seg_data = perform_segmentation(processed_front)
             if top_seg_data is None or front_seg_data is None:
                 raise ValueError("Segmentation failed for one or both images")
 
-            # 4. Visualize Segmentation
+            # 5. Visualize Segmentation
             top_seg_viz_filename = f"top_{ts}_seg.png"
             front_seg_viz_filename = f"front_{ts}_seg.png"
             top_seg_viz_path = os.path.join(results_folder, top_seg_viz_filename)
@@ -98,9 +143,10 @@ def process_uploaded_images_route():
             viz_top_success = visualize_segmentation(top_image_orig, top_seg_data, top_seg_viz_path)
             viz_front_success = visualize_segmentation(front_image_orig, front_seg_data, front_seg_viz_path)
             top_seg_url = url_for('static', filename=f'results/{top_seg_viz_filename}') if viz_top_success else None
-            front_seg_url = url_for('static', filename=f'results/{front_seg_viz_filename}') if viz_front_success else None
+            front_seg_url = url_for('static',
+                                    filename=f'results/{front_seg_viz_filename}') if viz_front_success else None
 
-            # 5. Calculate Volume, Mass, Density using the Class instance
+            # 6. Calculate Volume, Mass, Density using the Class instance
             material_type = request.form.get('materialType', 'Gravel')  # Default to Gravel
             condition = request.form.get('materialCondition', 'Loose')  # Default to Loose
             current_app.logger.info(f"Using Material: {material_type}, Condition: {condition} for calculation.")
@@ -112,7 +158,7 @@ def process_uploaded_images_route():
             if calculation_result is None:
                 raise ValueError("Calculation failed (returned None)")
 
-            # 6. Visualize 3D
+            # 7. Visualize 3D
             viz_3d_relative_path = None
             try:
                 visualizer = Visualizer()
@@ -132,7 +178,7 @@ def process_uploaded_images_route():
             except Exception as viz_err:
                 current_app.logger.error(f"Error during 3D visualization: {viz_err}", exc_info=True)
 
-            # 7. Prepare Response
+            # 8. Prepare Response
             processing_time = time.time() - start_time
             current_app.logger.info(f"Processing complete. Time: {processing_time:.2f}s")
             response_data = {
@@ -147,7 +193,15 @@ def process_uploaded_images_route():
                 'timestamp': time.strftime("%Y-%m-%d %H:%M:%S"),
                 'top_segmentation_url': top_seg_url,
                 'front_segmentation_url': front_seg_url,
-                'visualization_3d_url': url_for('static', filename=viz_3d_relative_path) if viz_3d_relative_path else None
+                'visualization_3d_url': url_for('static',
+                                                filename=viz_3d_relative_path) if viz_3d_relative_path else None,
+                # Add Edge Detection URLs
+                'top_edge_url': top_edge_url,
+                'front_edge_url': front_edge_url,
+                'top_edge_comp_url': top_edge_comp_url,
+                'front_edge_comp_url': front_edge_comp_url,
+                'top_aperture_used': top_aperture,
+                'front_aperture_used': front_aperture
             }
             return jsonify(response_data)
 
@@ -167,6 +221,7 @@ def process_uploaded_images_route():
             return jsonify({'error': error_msg}), 500
     else:
         return jsonify({'error': f"Invalid file type. Allowed: {', '.join(ALLOWED_EXTENSIONS)}"}), 400
+
 
 @app.route('/api/health')
 def health_check():
