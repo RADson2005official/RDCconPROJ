@@ -422,11 +422,14 @@ class Visualizer:
             filename: The filename to save to (include extension like .png, .jpg, .html)
             width: Width of the saved image in pixels
             height: Height of the saved image in pixels
+
+        Returns:
+            bool: True if saving was successful, False otherwise.  # <<< MODIFIED DOCSTRING >>>
         """
         try:
             if self.fig is None:
                 self.logger.error("No visualization to save. Call plot_cube() first.")
-                return
+                return False # <<< MODIFIED: Return False if no figure >>>
 
             # Set dimensions for the saved figure
             self.fig.update_layout(
@@ -438,8 +441,13 @@ class Visualizer:
             if filename.endswith('.html'):
                 self.fig.write_html(filename)
                 self.logger.info(f"Interactive HTML figure saved to {filename}")
+                return True # <<< MODIFIED: Return True on success >>>
             else:
+                # Assuming other extensions are static images (like png)
                 self.fig.write_image(filename)
                 self.logger.info(f"Static image saved to {filename}")
+                return True # <<< MODIFIED: Return True on success >>>
+
         except Exception as e:
             self.logger.error(f"Failed to save figure: {str(e)}\n{traceback.format_exc()}")
+            return False # <<< MODIFIED: Return False on exception >>>
