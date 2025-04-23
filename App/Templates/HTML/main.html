@@ -4,18 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RDC Construction Volume Measurement System</title>
-    <!-- Use url_for for static files -->
     <link rel="stylesheet" href="{{ url_for('static', filename='CSS/style.css') }}">
-    <!-- Bootstrap CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap Icons -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.1/font/bootstrap-icons.min.css" rel="stylesheet">
 </head>
 <body>
-    <!-- Navbar -->
     <nav class="navbar navbar-expand-lg mb-4">
         <div class="container">
-            <!-- Link brand to home -->
             <a class="navbar-brand" href="{{ url_for('index') }}">
                 <i class="bi bi-building me-2"></i>
                 <span class="brand-highlight">RDC</span> Volume Measurement
@@ -25,128 +20,85 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav" >
                 <ul class="navbar-nav ms-auto">
-                    <!-- Keep other nav links as placeholders for now -->
-                    <li class="nav-item">
-                        <a class="nav-link active" href="#"><i class="bi bi-house-door"></i> Dashboard</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="bi bi-archive"></i> Projects</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="bi bi-bar-chart"></i> Reports</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="bi bi-gear"></i> Settings</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="bi bi-question-circle"></i> Help</a>
-                    </li>
-                    <li class="nav-item"> <!-- Added About link -->
-                        <a class="nav-link" href="{{ url_for('about') }}"><i class="bi bi-info-circle"></i> About</a>
-                    </li>
+                    <li class="nav-item"><a class="nav-link active" href="#"><i class="bi bi-house-door"></i> Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-archive"></i> Projects</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-bar-chart"></i> Reports</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-gear"></i> Settings</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-question-circle"></i> Help</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('about') }}"><i class="bi bi-info-circle"></i> About</a></li>
                 </ul>
             </div>
         </div>
     </nav>
 
     <div class="container main-container">
-        <!-- Breadcrumb -->
         <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <!-- Link Home breadcrumb to index -->
+             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ url_for('index') }}"><i class="bi bi-house-door-fill"></i> Home</a></li>
-                <li class="breadcrumb-item"><a href="#">Projects</a></li> <!-- Placeholder -->
+                <li class="breadcrumb-item"><a href="#">Projects</a></li>
                 <li class="breadcrumb-item active">Volume Measurement</li>
             </ol>
         </nav>
 
-        <!-- Project Info -->
-        <div class="project-info mb-4 fade-in">
-            <div class="row">
-                <div class="col-md-6">
-                    <h5 class="mb-3"><i class="bi bi-info-circle me-2"></i>Project Information</h5>
-                    <div class="project-info-item">
-                        <i class="bi bi-calendar3"></i>
-                        <span>Date: April 20, 2025</span>
-                    </div>
-                    <div class="project-info-item">
-                        <i class="bi bi-geo-alt"></i>
-                        <span>Location: RDC Site 023-B</span>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="project-info-item">
-                        <i class="bi bi-person"></i>
-                        <span>Operator: John Smith</span>
-                    </div>
-                    <div class="project-info-item">
-                        <i class="bi bi-tag"></i>
-                        <span>Project ID: RDC-2025-042</span>
-                    </div>
-                    <div class="project-info-item">
-                        <i class="bi bi-check-circle"></i>
-                        <span>Status: Active</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Main content -->
         <div class="row g-4">
-            <!-- Left column: Image upload and settings -->
-            <div class="col-lg-4">
+            <div class="col-lg-6">
+                <div class="project-info card mb-4 fade-in">
+                    <div class="card-header"><h5 class="mb-0"><i class="bi bi-info-circle me-2"></i>Project Information</h5></div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="project-info-item"><i class="bi bi-calendar3"></i> <span>Date: April 20, 2025</span></div>
+                                <div class="project-info-item"><i class="bi bi-geo-alt"></i> <span>Location: RDC Site 023-B</span></div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="project-info-item"><i class="bi bi-person"></i> <span>Operator: John Smith</span></div>
+                                <div class="project-info-item"><i class="bi bi-tag"></i> <span>Project ID: RDC-2025-042</span></div>
+                                <div class="project-info-item"><i class="bi bi-check-circle"></i> <span>Status: Active</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="card mb-4">
                     <div class="card-header d-flex align-items-center">
                         <i class="bi bi-cloud-upload me-2 text-primary"></i> Image Upload
                     </div>
                     <div class="card-body">
-                        <!-- Top View Upload -->
-                        <div class="upload-area mb-4">
-                            <!-- Match ID and add name attribute for JS/Form Data -->
+                        <div class="upload-area mb-3">
                             <input type="file" id="topImageFile" name="topImageFile" accept="image/*">
                             <div class="py-3">
                                 <i class="bi bi-camera upload-icon"></i>
                                 <h5 class="mt-2 mb-1">Top View Image</h5>
-                                <p class="text-muted small mb-0">Drop your image here or click to browse</p>
-                                <small class="text-muted">Supported formats: JPG, PNG, BMP</small>
+                                <p class="text-muted small mb-0">Drop or click to browse</p>
+                                <small class="text-muted">Formats: JPG, PNG, BMP</small>
                             </div>
                         </div>
-                        <!-- Front View Upload -->
-                        <div class="upload-area">
-                            <!-- Match ID and add name attribute for JS/Form Data -->
+                        <div class="upload-area mb-3">
                             <input type="file" id="frontImageFile" name="frontImageFile" accept="image/*">
                             <div class="py-3">
                                 <i class="bi bi-camera-video upload-icon"></i>
                                 <h5 class="mt-2 mb-1">Front View Image</h5>
-                                <p class="text-muted small mb-0">Drop your image here or click to browse</p>
-                                <small class="text-muted">Supported formats: JPG, PNG, BMP</small>
+                                <p class="text-muted small mb-0">Drop or click to browse</p>
+                                <small class="text-muted">Formats: JPG, PNG, BMP</small>
                             </div>
                         </div>
-                        <!-- Added Load Status Display Area -->
-                        <div id="loadStatus" class="mt-3 text-center text-muted small">Select top and front view images.</div>
+                        <div id="loadStatus" class="mt-2 text-center text-muted small">Select top and front view images.</div>
                     </div>
                 </div>
 
-                <!-- Pipeline Settings Card -->
                 <div class="card mb-4">
                     <div class="card-header d-flex align-items-center">
                         <i class="bi bi-sliders me-2 text-primary"></i> Measurement Settings
                     </div>
                     <div class="card-body">
                         <ul class="nav nav-pills nav-fill mb-3 nav-pipeline" id="pipelineTab" role="tablist">
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link active" id="standard-tab" data-bs-toggle="pill" data-bs-target="#standard" type="button" role="tab">Standard</button>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="enhanced-tab" data-bs-toggle="pill" data-bs-target="#enhanced" type="button" role="tab">Enhanced</button>
-                            </li>
+                            <li class="nav-item" role="presentation"><button class="nav-link active" id="standard-tab" data-bs-toggle="pill" data-bs-target="#standard" type="button" role="tab">Standard</button></li>
+                            <li class="nav-item" role="presentation"><button class="nav-link" id="enhanced-tab" data-bs-toggle="pill" data-bs-target="#enhanced" type="button" role="tab">Enhanced</button></li>
                         </ul>
-
                         <div class="tab-content" id="pipelineTabContent">
                             <div class="tab-pane fade show active" id="standard" role="tabpanel">
-                                <div class="alert alert-info rounded-lg" role="alert">
-                                    <i class="bi bi-info-circle-fill me-2"></i>
-                                    Standard processing uses basic image analysis for most construction materials.
+                                <div class="alert alert-info rounded-lg small" role="alert">
+                                    <i class="bi bi-info-circle-fill me-2"></i>Standard uses basic analysis for most materials.
                                 </div>
                                 <div class="mb-3">
                                     <label for="materialType" class="form-label">Material Type:</label>
@@ -166,252 +118,131 @@
                             </div>
                             <div class="tab-pane fade" id="enhanced" role="tabpanel">
                                 <div class="accordion" id="enhancedOptions">
-                                    <!-- Vision Settings Accordion -->
-                                    <div class="accordion-item border-0 bg-light-subtle mb-2">
-                                        <h2 class="accordion-header" id="headingVision">
-                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseVision">
-                                                <i class="bi bi-eye me-2"></i> Vision Settings
-                                            </button>
-                                        </h2>
-                                        <div id="collapseVision" class="accordion-collapse collapse" data-bs-parent="#enhancedOptions">
-                                            <div class="accordion-body">
-                                                <div class="form-check mb-2">
-                                                    <input class="form-check-input" type="checkbox" id="useStereo">
-                                                    <label class="form-check-label" for="useStereo">Use Stereo Vision</label>
-                                                </div>
-                                                <div class="form-check mb-2">
-                                                    <input class="form-check-input" type="checkbox" id="useDepthAware" checked>
-                                                    <label class="form-check-label" for="useDepthAware">Use Depth-Aware Segmentation</label>
-                                                </div>
-                                                <div class="form-check mb-2">
-                                                    <input class="form-check-input" type="checkbox" id="useEdgeDetection">
-                                                    <label class="form-check-label" for="useEdgeDetection">Use Enhanced Edge Detection</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- Calibration Accordion -->
-                                    <div class="accordion-item border-0 bg-light-subtle mb-2">
-                                        <h2 class="accordion-header" id="headingCalibration">
-                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseCalibration">
-                                                <i class="bi bi-tools me-2"></i> Calibration
-                                            </button>
-                                        </h2>
-                                        <div id="collapseCalibration" class="accordion-collapse collapse" data-bs-parent="#enhancedOptions">
-                                            <div class="accordion-body">
-                                                <div class="mb-3">
-                                                    <label for="temperature" class="form-label">Temperature (°C):</label>
-                                                    <input type="number" class="form-control" id="temperature" value="20.0" step="0.1">
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label for="calibrationFile" class="form-label">Calibration File:</label>
-                                                    <input type="file" class="form-control" id="calibrationFile" accept=".npz,.json">
-                                                </div>
-                                                <div class="mb-0">
-                                                    <label for="referenceDimension" class="form-label">Reference Dimension (cm):</label>
-                                                    <input type="number" class="form-control" id="referenceDimension" value="100.0" step="0.1">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- Validation Accordion -->
-                                    <div class="accordion-item border-0 bg-light-subtle">
-                                        <h2 class="accordion-header" id="headingValidation">
-                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseValidation">
-                                                <i class="bi bi-check-square me-2"></i> Validation
-                                            </button>
-                                        </h2>
-                                        <div id="collapseValidation" class="accordion-collapse collapse" data-bs-parent="#enhancedOptions">
-                                            <div class="accordion-body">
-                                                <div class="form-check mb-2">
-                                                    <input class="form-check-input" type="checkbox" id="enableValidation" checked>
-                                                    <label class="form-check-label" for="enableValidation">Enable Validation Metrics</label>
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label for="densityValue" class="form-label">Material Density (kg/m³):</label>
-                                                    <input type="number" class="form-control" id="densityValue" value="2400" step="10">
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label for="thermalModelFile" class="form-label">Thermal Model:</label>
-                                                    <input type="file" class="form-control" id="thermalModelFile" accept=".json">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                     <div class="accordion-item border-0 bg-light-subtle mb-2">...</div>
+                                     <div class="accordion-item border-0 bg-light-subtle mb-2">...</div>
+                                     <div class="accordion-item border-0 bg-light-subtle">...</div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Action Buttons -->
                 <div class="d-grid gap-2">
-                    <!-- Match ID from JS and set type="button" -->
-                    <button type="button" class="btn btn-primary btn-process" id="processUploadedBtn" disabled>
+                    <button type="button" class="btn btn-primary btn-lg btn-process" id="processUploadedBtn" disabled>
                         <i class="bi bi-play-fill me-2"></i> Process Images
                     </button>
-                    <!-- Match ID from JS -->
                     <button type="button" class="btn btn-outline-secondary" id="clearBtn">
                         <i class="bi bi-trash me-2"></i> Clear All
                     </button>
                 </div>
             </div>
 
-            <!-- Middle column: Image preview -->
-            <div class="col-lg-4">
-                <div class="card mb-4">
+            <div class="col-lg-6">
+                 <div class="card mb-4">
                     <div class="card-header d-flex align-items-center justify-content-between">
-                        <div>
-                            <i class="bi bi-image me-2 text-primary"></i> Image Preview
-                        </div>
-                        <!-- Preview navigation buttons (keep disabled for now) -->
+                        <div><i class="bi bi-image me-2 text-primary"></i> Image Preview</div>
                         <div class="btn-group btn-group-sm">
-                            <button type="button" class="btn btn-outline-secondary" id="prevBtn" disabled>
-                                <i class="bi bi-chevron-left"></i>
-                            </button>
-                            <button type="button" class="btn btn-outline-secondary" id="nextBtn" disabled>
-                                <i class="bi bi-chevron-right"></i>
-                            </button>
+                            <button type="button" class="btn btn-outline-secondary" id="prevBtn" disabled><i class="bi bi-chevron-left"></i></button>
+                            <button type="button" class="btn btn-outline-secondary" id="nextBtn" disabled><i class="bi bi-chevron-right"></i></button>
                         </div>
                     </div>
                     <div class="card-body">
-                        <!-- Top View Preview -->
-                        <h6 class="mb-2 text-secondary fw-bold"><i class="bi bi-arrow-down-square me-1"></i> Top View</h6>
-                        <div class="image-preview-container mb-3">
-                            <!-- Image initially hidden -->
-                            <img id="topImage" src="" alt="Top View Image Preview" class="img-fluid rounded" style="display: none;">
-                            <!-- Placeholder initially visible -->
-                            <div class="placeholder-image">
-                                <i class="bi bi-image"></i>
-                                <p>Top View Preview</p>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6 class="mb-2 text-secondary fw-bold"><i class="bi bi-arrow-down-square me-1"></i> Top View</h6>
+                                <div class="image-preview-container mb-3 mb-md-0">
+                                    <img id="topImage" src="" alt="Top View Image Preview" class="img-fluid rounded" style="display: none;">
+                                    <div class="placeholder-image"><i class="bi bi-image"></i><p>Top View</p></div>
+                                </div>
                             </div>
-                        </div>
-                        <!-- Front View Preview -->
-                        <h6 class="mb-2 text-secondary fw-bold"><i class="bi bi-aspect-ratio me-1"></i> Front View</h6>
-                        <div class="image-preview-container">
-                            <!-- Image initially hidden -->
-                            <img id="frontImage" src="" alt="Front View Image Preview" class="img-fluid rounded" style="display: none;">
-                            <!-- Placeholder initially visible -->
-                            <div class="placeholder-image">
-                                <i class="bi bi-image"></i>
-                                <p>Front View Preview</p>
-                            </div>
+                             <div class="col-md-6">
+                                <h6 class="mb-2 text-secondary fw-bold"><i class="bi bi-aspect-ratio me-1"></i> Front View</h6>
+                                <div class="image-preview-container">
+                                    <img id="frontImage" src="" alt="Front View Image Preview" class="img-fluid rounded" style="display: none;">
+                                    <div class="placeholder-image"><i class="bi bi-image"></i><p>Front View</p></div>
+                                </div>
+                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Add this after the Image Preview card in the middle column -->
-            <div class="card">
-                <div class="card-header d-flex align-items-center justify-content-between">
-                    <div>
-                        <i class="bi bi-vector-pen me-2 text-primary"></i> Edge Detection
-                    </div>
-                    <div class="btn-group btn-group-sm">
-                        <button type="button" class="btn btn-outline-secondary" id="edgeViewToggleBtn">
-                            <i class="bi bi-arrows-angle-expand"></i>
-                        </button>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <!-- Top View Edge Detection Preview -->
-                    <h6 class="mb-2 text-secondary fw-bold"><i class="bi bi-arrow-down-square me-1"></i> Top View Edges</h6>
-                    <div class="image-preview-container mb-3">
-                        <!-- Image initially hidden -->
-                        <img id="topEdgeImage" src="" alt="Top View Edge Detection" class="img-fluid rounded" style="display: none;">
-                        <!-- Placeholder initially visible -->
-                        <div class="placeholder-image" id="topEdgePlaceholder">
-                            <i class="bi bi-braces-asterisk"></i>
-                            <p>Edge Detection Preview</p>
-                        </div>
-                    </div>
-                    <!-- Front View Edge Detection Preview -->
-                    <h6 class="mb-2 text-secondary fw-bold"><i class="bi bi-aspect-ratio me-1"></i> Front View Edges</h6>
-                    <div class="image-preview-container">
-                        <!-- Image initially hidden -->
-                        <img id="frontEdgeImage" src="" alt="Front View Edge Detection" class="img-fluid rounded" style="display: none;">
-                        <!-- Placeholder initially visible -->
-                        <div class="placeholder-image" id="frontEdgePlaceholder">
-                            <i class="bi bi-braces-asterisk"></i>
-                            <p>Edge Detection Preview</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Right column: Results, Console, Visualization -->
-            <div class="col-lg-4">
-                <!-- Results Card -->
                 <div class="card mb-4">
+                    <div class="card-header d-flex align-items-center justify-content-between">
+                        <div><i class="bi bi-vector-pen me-2 text-primary"></i> Edge Detection</div>
+                        <div class="btn-group btn-group-sm">
+                            <button type="button" class="btn btn-outline-secondary" id="edgeViewToggleBtn"><i class="bi bi-arrows-angle-expand"></i></button>
+                        </div>
+                    </div>
+                     <div class="card-body">
+                         <div class="row">
+                             <div class="col-md-6">
+                                <h6 class="mb-2 text-secondary fw-bold"><i class="bi bi-arrow-down-square me-1"></i> Top Edges</h6>
+                                <div class="image-preview-container mb-3 mb-md-0">
+                                    <img id="topEdgeImage" src="" alt="Top View Edge Detection" class="img-fluid rounded" style="display: none;">
+                                    <div class="placeholder-image" id="topEdgePlaceholder"><i class="bi bi-braces-asterisk"></i><p>Top Edges</p></div>
+                                </div>
+                             </div>
+                             <div class="col-md-6">
+                                <h6 class="mb-2 text-secondary fw-bold"><i class="bi bi-aspect-ratio me-1"></i> Front Edges</h6>
+                                <div class="image-preview-container">
+                                    <img id="frontEdgeImage" src="" alt="Front View Edge Detection" class="img-fluid rounded" style="display: none;">
+                                    <div class="placeholder-image" id="frontEdgePlaceholder"><i class="bi bi-braces-asterisk"></i><p>Front Edges</p></div>
+                                </div>
+                             </div>
+                         </div>
+                    </div>
+                </div>
+
+                <div class="card mb-4 visualization-card">
+                    <div class="card-header">
+                        <i class="bi bi-bounding-box me-2 text-primary"></i> 3D Visualization
+                    </div>
+                    <div class="card-body">
+                        <div id="visualization" class="visualization-area d-flex align-items-center justify-content-center text-muted">
+                            Visualization Area
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-4 results-card">
                     <div class="card-header">
                         <i class="bi bi-table me-2 text-primary"></i> Results
                     </div>
-                    <div class="card-body p-0"> <!-- Remove padding for table -->
+                    <div class="card-body p-0">
                         <div class="table-responsive">
-                            <!-- Added table-results class -->
-                            <table class="table table-results mb-0">
-                                <thead>
+                            <table class="table table-striped table-hover table-results mb-0">
+                                <thead class="table-light">
                                     <tr>
                                         <th>#</th>
+                                        <th>Mass (kg)</th>
+                                        <th>Density (kg/m³)</th>
                                         <th>Volume (m³)</th>
-                                        <th>Density</th>
-                                        <th>Mass</th>
                                         <th>Timestamp</th>
-                                        <!-- Add other headers if needed -->
                                     </tr>
                                 </thead>
-                                <!-- Added tbody for JS to populate -->
                                 <tbody id="results-body">
-                                    <!-- Results rows will be added here by JS -->
-                                    <tr><td colspan="3" class="text-center text-muted p-3">No results yet.</td></tr> <!-- Initial placeholder row -->
+                                    <tr><td colspan="5" class="text-center text-muted p-3">No results yet.</td></tr>
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
 
-                <!-- Console Output Card -->
-                <div class="card mb-4">
+                <div class="card mb-4 console-output-card">
                     <div class="card-header">
                         <i class="bi bi-terminal me-2 text-primary"></i> Console Output
                     </div>
-                    <!-- Added console-output class -->
                     <div id="console" class="console-output">
-                        <div class="console-entry console-info">Initializing system...</div> <!-- Initial message -->
+                        <div class="console-entry console-info">Initializing system...</div>
                     </div>
                 </div>
-
-                <!-- Visualization Card -->
-                <div class="card">
-                    <div class="card-header">
-                        <i class="bi bi-bounding-box me-2 text-primary"></i> Visualization
-                    </div>
-                    <div class="card-body">
-                        <!-- Added visualization div for JS -->
-                        <div id="visualization" class="d-flex align-items-center justify-content-center text-muted">
-                            Visualization Area
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div> <!-- End main row -->
-
-        <!-- Status Bar (Fixed Bottom) -->
-        <div class="status-bar p-2">
-            <div class="container d-flex justify-content-between align-items-center">
-                <!-- Added status div for JS -->
-                <div id="status" class="status-text">
-                    <span class="status-dot active"></span> Application ready.
-                </div>
-                <span class="status-text small">RDC Volume System v1.0</span>
             </div>
         </div>
 
-    </div> <!-- End main container -->
+        <div class="status-bar p-2">...</div>
+    </div>
 
-    <!-- Include Bootstrap JS bundle -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-    <!-- Include your custom JS using url_for -->
     <script src="{{ url_for('static', filename='JS/main.js') }}"></script>
 </body>
 </html>

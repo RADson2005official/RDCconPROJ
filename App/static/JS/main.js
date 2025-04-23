@@ -217,16 +217,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     // Display results in table
                     if (resultsBody) {
-                        const newRow = `
-                            <tr>
-                                <td>${resultsBody.rows.length}</td>
-                                <td>${data.volume} ${data.unit_volume}</td>
-                                <td>${data.density} ${data.unit_density}</td>
-                                <td>${data.mass} ${data.unit_mass}</td>
-                                <td>${data.timestamp}</td>
-                            </tr>
-                        `;
-                        // Clear placeholder/spinner before adding row
+                      const newRow = `
+                       <tr>
+                        <td>${resultsBody.rows.length}</td>
+                        <td>${data.volume} ${data.unit_mass}</td>
+                        <td>${data.density} ${data.unit_density}</td>
+                        <td>${data.mass} ${data.unit_volume}</td>                    
+                        <td>${data.timestamp}</td>
+                    </tr>
+                     `;
+                      // Clear placeholder/spinner before adding row
                         if (resultsBody.rows.length === 1 && resultsBody.rows[0].cells.length === 1 && resultsBody.rows[0].cells[0].querySelector('.spinner-border')) {
                              resultsBody.innerHTML = '';
                         }
